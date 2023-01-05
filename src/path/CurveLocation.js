@@ -488,17 +488,30 @@ var CurveLocation = Base.extend(/** @lends CurveLocation# */{
             // shortest offsets on all involved curves that are unambiguous.
             offset = Math.min.apply(Math, offsets),
             v2 = t1Inside ? c2.getTangentAtTime(t1)
-                    : c2.getPointAt(offset).subtract(pt),
+                    : c2.getPointAt(offset)?.subtract(pt),
             v1 = t1Inside ? v2.negate()
-                    : c1.getPointAt(-offset).subtract(pt),
+                    : c1.getPointAt(-offset)?.subtract(pt),
             v4 = t2Inside ? c4.getTangentAtTime(t2)
-                    : c4.getPointAt(offset).subtract(pt),
+                    : c4.getPointAt(offset)?.subtract(pt),
             v3 = t2Inside ? v4.negate()
-                    : c3.getPointAt(-offset).subtract(pt),
-            a1 = v1.getAngle(),
-            a2 = v2.getAngle(),
-            a3 = v3.getAngle(),
-            a4 = v4.getAngle();
+                    : c3.getPointAt(-offset)?.subtract(pt);
+
+        /**
+         * It's possible for @function addOffsets to compute invalid
+         * offsets. So, if at any point in time we needed to evaluate one of this offsets,
+         * the related value ends up undefined and we return.
+         * 
+         * The issue is most likely caused by the division by 32 inside @function addOffsets
+         * although we are not 100% sure of it.
+         */
+        if (!v1 || !v2 || !v3 || !v4) {
+            return false;
+        }
+
+        var a1 = v1.getAngle();
+        var a2 = v2.getAngle();
+        var a3 = v3.getAngle();
+        var a4 = v4.getAngle();
         // Count how many times curve2 angles appear between the curve1 angles.
         // If each pair of angles split the other two, then the edges cross.
         // Use t1Inside to decide which angle pair to check against.
