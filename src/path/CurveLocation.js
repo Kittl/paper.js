@@ -483,18 +483,25 @@ var CurveLocation = Base.extend(/** @lends CurveLocation# */{
             addOffsets(c3, true);
             addOffsets(c4, false);
         }
+        var getPointAndSubtract = function (curve, offset, subtract) {
+            var p = curve.getPointAt(offset);
+            if (!p) {
+                return null;
+            }
+            return p.subtract(subtract);
+        };
         var pt = this.getPoint(),
             // Determined the shared unambiguous offset by the taking the
             // shortest offsets on all involved curves that are unambiguous.
             offset = Math.min.apply(Math, offsets),
             v2 = t1Inside ? c2.getTangentAtTime(t1)
-                    : c2.getPointAt(offset)?.subtract(pt),
+                    : getPointAndSubtract(c2, offset, pt),
             v1 = t1Inside ? v2.negate()
-                    : c1.getPointAt(-offset)?.subtract(pt),
+                    : getPointAndSubtract(c1, -offset, pt),
             v4 = t2Inside ? c4.getTangentAtTime(t2)
-                    : c4.getPointAt(offset)?.subtract(pt),
+                    : getPointAndSubtract(c4, offset, pt),
             v3 = t2Inside ? v4.negate()
-                    : c3.getPointAt(-offset)?.subtract(pt);
+                    : getPointAndSubtract(c3, -offset, pt);
 
         /**
          * It's possible for @function addOffsets to compute invalid
