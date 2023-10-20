@@ -1,12 +1,15 @@
 {
   "name": "@kittl/paper",
-  "version": "0.12.30",
+  "version": "0.12.36",
   "description": "The Swiss Army Knife of Vector Graphics Scripting",
   "license": "MIT",
   "homepage": "http://paperjs.org",
   "repository": {
     "type": "git",
     "url": "https://github.com/paperjs/paper.js"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
   },
   "bugs": "https://github.com/paperjs/paper.js/issues",
   "contributors": [

@@ -40,5 +40,8 @@
     "paper",
     "paper.js",
     "paperjs"
-  ]
+  ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  }
 }

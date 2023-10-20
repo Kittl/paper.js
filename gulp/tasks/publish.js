@@ -96,7 +96,10 @@ packages.forEach(function(name) {
                 version: options.version,
                 dependencies: {
                     paper: options.version
-                }
+                },
+                publishConfig: {
+                    registry: "https://npm.pkg.github.com"
+                },
             }, jsonModifierOptions))
             .pipe(gulp.dest(path))
             .pipe(shell('yarn npm publish', opts));
